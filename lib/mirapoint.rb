@@ -1,0 +1,3 @@
+module Mirapoint
+  # Your code goes here...
+end
