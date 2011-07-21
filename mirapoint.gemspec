@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
   s.name        = "mirapoint"
   s.version     = Mirapoint::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["Mike Kennedy"]
+  s.email       = ["mkennedy76@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
+  s.summary     = %q{Gem that provides an API to the Admin service on Mirapoint systems.}
   s.description = %q{TODO: Write a gem description}
 
   s.rubyforge_project = "mirapoint"

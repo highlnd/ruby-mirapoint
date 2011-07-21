@@ -9,6 +9,7 @@ module Mirapoint
     attr_reader :version
     attr_reader :connected
     attr_reader :sessionid
+    attr_reader :okno
 
     def initialize(hostname, port=10143, ssl=false)
       @hostname = hostname
@@ -52,8 +53,8 @@ module Mirapoint
     end
     
     def login(username, password)
-      response = command(["LOGIN", username, password])
-      @sessionid = response
+      response = command("LOGIN", username, password)
+      @sessionid = response[0]
       if /^OK/.match @okno
         return true
       end
@@ -62,6 +63,9 @@ module Mirapoint
     
     def command(*cmds)
       
+      puts cmds.size
+      puts cmds.class
+
       tag = send_command(cmds)
  
       response = []
@@ -78,13 +82,17 @@ module Mirapoint
         
     private
     
-    def send_command(*cmds)
+    def send_command(cmds)
       
       @lasttag = @lasttag + 1
       
       tag = @lasttag
       cmd = tag.to_s
 
+      puts cmds.size
+      puts cmd
+      puts cmds.join(" ")
+      
       if cmds.size < 2
         cmd = cmd + " " + cmds[0]
       else
@@ -121,7 +129,7 @@ module Mirapoint
     
     def get_response(tag)
       
-      response = ""
+      response = Array.new
       @okno = nil
       
       loop do
@@ -133,9 +141,13 @@ module Mirapoint
           line.sub!(/^#{tag} /, "")
           @okno = line
           return response
+        else
+          if line == ""
+            return response
+          end
         end
-        
-        response = response + line
+                
+        response.push(line)
         
       end
 
