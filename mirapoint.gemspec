@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["mkennedy76@gmail.com"]
   s.homepage    = ""
   s.summary     = %q{Gem that provides an API to the Admin service on Mirapoint systems.}
-  s.description = %q{TODO: Write a gem description}
+  s.description = %q{This gem assists with connecting to the admind protocol on Mirapoint systems.}
 
   s.rubyforge_project = "mirapoint"
 
