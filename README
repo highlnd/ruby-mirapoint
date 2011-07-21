@@ -1,0 +1,26 @@
+Documentation coming. For now here is an example:
+
+require 'mirapoint'
+
+# Connect to the host with the params
+# hostname - mirahost.example.com
+# port - 10243 (default 10143)
+# ssl - true (default false)
+# debug - true (default false)
+
+m = Mirapoint::Connection.new('mirahost.example.com', 10243, true, true)
+m.connect
+
+if m.login("administrator", "adminpass")
+   puts "Login Successful"
+   puts "Session ID: " + m.sessionid
+end
+
+m.command("domain", "setcurrent", "example.com")
+puts m.okno
+
+m.command("user", "list", "", "", "").each do |res|
+  puts res
+end
+
+puts m.okno

@@ -1,3 +1,6 @@
+#
+# A simple library for connecting to Mirapoint's admind service
+#
 require 'socket'
 require 'openssl'
 
@@ -11,11 +14,12 @@ module Mirapoint
     attr_reader :sessionid
     attr_reader :okno
 
-    def initialize(hostname, port=10143, ssl=false)
+    def initialize(hostname, port=10143, ssl=false, debug=false)
       @hostname = hostname
       @port = port
       @ssl = ssl
       @connected = false
+      @debug = debug
     end
 
     def connect
@@ -63,9 +67,6 @@ module Mirapoint
     
     def command(*cmds)
       
-      puts cmds.size
-      puts cmds.class
-
       tag = send_command(cmds)
  
       response = []
@@ -89,17 +90,11 @@ module Mirapoint
       tag = @lasttag
       cmd = tag.to_s
 
-      puts cmds.size
-      puts cmd
-      puts cmds.join(" ")
-      
       if cmds.size < 2
         cmd = cmd + " " + cmds[0]
       else
         cmd = cmd + escape_args(cmds)
       end
-      
-      puts cmd
       
       if xmit(cmd)
         return tag
@@ -135,6 +130,11 @@ module Mirapoint
       loop do
         line = @socket.gets
         
+        if @debug
+          puts "S: " + line; 
+        end
+
+        
         if /^\* #{tag} /.match line
           line.sub!(/^\* #{tag} /, "")
         elsif (/^#{tag} OK/.match line) || (/^#{tag} NO/.match line)
@@ -155,6 +155,10 @@ module Mirapoint
     
     def xmit(cmd)
     
+      if @debug
+        puts "C: " + cmd; 
+      end
+      
       if @connected
           @socket.puts(cmd + "\r\n")
           return true
